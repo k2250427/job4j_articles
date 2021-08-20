@@ -7,7 +7,7 @@ import ru.job4j.articles.model.Word;
 import ru.job4j.articles.service.generator.ArticleGenerator;
 import ru.job4j.articles.store.Store;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -28,7 +28,7 @@ public class SimpleArticleService implements ArticleService {
         var articles = IntStream.iterate(0, i -> i < count, i -> i + 1)
                 .peek(i -> LOGGER.info("Сгенерирована статья № {}", i))
                 .mapToObj((x) -> articleGenerator.generate(words))
-                .map((x)->new SoftReference<>(articleStore.save(x)))
+                .map((x)->new WeakReference<>(articleStore.save(x)))
                 .collect(Collectors.toList());
         //articles.forEach(articleStore::save);
     }
